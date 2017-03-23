@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/WindomZ/go-commander"
 	"github.com/gpmer/gpm.go/lib"
-	"github.com/urfave/cli"
 	"os"
 	"os/exec"
 	"path"
@@ -12,58 +12,52 @@ import (
 func main() {
 
 	gpm.Prepare()
-
-	app := cli.NewApp()
-	app.Name = "gpm"
-	app.Usage = "Git Package Manager, make you manage the repository easier, Power by Go"
-
 	var config gpm.ConfigS = gpm.GetConfig()
 
-	app.Commands = []cli.Command{
-		{
-			Name:    "add",
-			Aliases: []string{"a"},
-			Usage:   "add a repository to gpm",
-			Action: func(c *cli.Context) error {
-				var repo string = c.Args().First()
+	commander.Program.
+		Command("gpm").
+		Description("Git Package Manager, make you manage the repository easier, Power by Go")
 
-				os.Chdir(config.Paths.Temp)
+	commander.Program.
+		Command("add <repo>").
+		Aliases([]string{"a"}).
+		Description("add a repository to gpm").
+		Action(func(c commander.Context) {
+			var repo string = c.GetString("<repo>")
 
-				cmd := exec.Command("git", "clone", repo)
-				cmd.Stdout = os.Stdout
-				cmd.Stderr = os.Stderr
+			os.Chdir(config.Paths.Temp)
 
-				if e := cmd.Start(); nil != e {
-					fmt.Printf("ERROR: %v\n", e)
-				}
-				if e := cmd.Wait(); nil != e {
-					fmt.Printf("ERROR: %v\n", e)
-				}
+			cmd := exec.Command("git", "clone", repo)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
 
-				fmt.Printf("项目克隆至: %s\n", path.Join(config.Paths.Temp))
+			if e := cmd.Start(); nil != e {
+				fmt.Printf("ERROR: %v\n", e)
+			}
+			if e := cmd.Wait(); nil != e {
+				fmt.Printf("ERROR: %v\n", e)
+			}
 
-				return nil
-			},
-		},
-		{
-			Name:    "remove",
-			Aliases: []string{"rm"},
-			Usage:   "Remove a repository from registry and disk",
-			Action: func(c *cli.Context) error {
-				fmt.Println("remove repo: ", c.Args().First())
-				return nil
-			},
-		},
-		{
-			Name:    "list",
-			Aliases: []string{"c"},
-			Usage:   "Display the all repositories in registry",
-			Action: func(c *cli.Context) error {
-				fmt.Println("get list: ", c.Args().First())
-				return nil
-			},
-		},
-	}
+			fmt.Println("clone repo to", path.Join(config.Paths.Temp))
+		})
 
-	app.Run(os.Args)
+	commander.Program.
+		Command("remove <repo>").
+		Aliases([]string{"rm"}).
+		Description("remove a repository from registry and disk").
+		Action(func(c commander.Context) {
+			var repo string = c.GetString("<repo>")
+			fmt.Println("remove repo:", repo)
+		})
+
+	commander.Program.
+		Command("list <repo>").
+		Aliases([]string{"c"}).
+		Description("display the all repositories in registry").
+		Action(func(c commander.Context) {
+			var repo string = c.GetString("<repo>")
+			fmt.Println("get list:", repo)
+		})
+
+	commander.Program.Parse()
 }
