@@ -1,9 +1,9 @@
 package gpm
 
 import (
+	"os"
 	"path/filepath"
 	"runtime"
-	"os"
 )
 
 type PathS struct {
@@ -21,7 +21,7 @@ type ConfigS struct {
 	init  bool
 }
 
-var Config ConfigS;
+var Config ConfigS
 
 func UserHomeDir() string {
 	if runtime.GOOS == "windows" {
@@ -42,16 +42,16 @@ func GetConfig() ConfigS {
 
 	var name string = "gpm.go"
 	if os.Getenv("GO_ENV") == "DEVELOPMENT" {
-		Config.Paths.Home = filepath.Join("./", ".home");
+		Config.Paths.Home = filepath.Join("./", ".home")
 	} else {
-		Config.Paths.Home = home;
+		Config.Paths.Home = home
 	}
-	Config.Name = name;
-	Config.Paths.Root = filepath.Join(Config.Paths.Home, "." + Config.Name)
+	Config.Name = name
+	Config.Paths.Root = filepath.Join(Config.Paths.Home, "."+Config.Name)
 	Config.Paths.Temp = filepath.Join(Config.Paths.Root, "temp")
 	Config.Paths.Storage = filepath.Join(Config.Paths.Root, "storage")
 	Config.Paths.Base = filepath.Join(Config.Paths.Home, name)
-	Config.Paths.Config = filepath.Join(Config.Paths.Root, name + ".conf.json")
+	Config.Paths.Config = filepath.Join(Config.Paths.Root, name+".conf.json")
 	Config.init = true
-	return Config;
+	return Config
 }

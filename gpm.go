@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"github.com/urfave/cli"
 	"github.com/gpmer/gpm.go/lib"
+	"github.com/urfave/cli"
+	"os"
 	"os/exec"
 	"path"
 )
@@ -24,7 +24,7 @@ func main() {
 			Name:    "add",
 			Aliases: []string{"a"},
 			Usage:   "add a repository to gpm",
-			Action:  func(c *cli.Context) error {
+			Action: func(c *cli.Context) error {
 				var repo string = c.Args().First()
 
 				os.Chdir(config.Paths.Temp)
@@ -49,7 +49,7 @@ func main() {
 			Name:    "remove",
 			Aliases: []string{"rm"},
 			Usage:   "Remove a repository from registry and disk",
-			Action:  func(c *cli.Context) error {
+			Action: func(c *cli.Context) error {
 				fmt.Println("remove repo: ", c.Args().First())
 				return nil
 			},
@@ -58,7 +58,7 @@ func main() {
 			Name:    "list",
 			Aliases: []string{"c"},
 			Usage:   "Display the all repositories in registry",
-			Action:  func(c *cli.Context) error {
+			Action: func(c *cli.Context) error {
 				fmt.Println("get list: ", c.Args().First())
 				return nil
 			},
