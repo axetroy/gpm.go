@@ -23,7 +23,7 @@ func main() {
 		Aliases([]string{"a"}).
 		Description("add a repository to gpm").
 		Action(func(c commander.Context) {
-			var repo string = c.GetString("<repo>")
+			var repo string = c.MustString("<repo>")
 
 			os.Chdir(config.Paths.Temp)
 
@@ -46,7 +46,7 @@ func main() {
 		Aliases([]string{"rm"}).
 		Description("remove a repository from registry and disk").
 		Action(func(c commander.Context) {
-			var repo string = c.GetString("<repo>")
+			var repo string = c.MustString("<repo>")
 			fmt.Println("remove repo:", repo)
 		})
 
@@ -55,7 +55,7 @@ func main() {
 		Aliases([]string{"c"}).
 		Description("display the all repositories in registry").
 		Action(func(c commander.Context) {
-			var repo string = c.GetString("<repo>")
+			var repo string = c.MustString("<repo>")
 			fmt.Println("get list:", repo)
 		})
 
